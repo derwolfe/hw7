@@ -1,0 +1,44 @@
+print_track
+title:The Show Goes On
+artist:Bruce Hornsby
+
+print_track
+title:Jacob's Ladder
+artist:Bruce Hornsby
+
+print_track
+title:Aqualung
+artist:Jethro Tull
+
+print_track
+title:Cold Wind to Valhalla
+artist:Jethro Tull
+
+print_playlist
+title:Playlist 2
+order:title
+
+print_playlist
+title:Playlist 2
+order:artist
+
+print_playlist
+title:Playlist 1
+order:added_order
+
+print_playlists
+
+print_tracks_title
+
+print_tracks_artist
+
+print_collection
+
+delete_track
+title:The Old Playground
+
+print_tracks_title
+
+
+
+

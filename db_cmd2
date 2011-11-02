@@ -1,0 +1,17 @@
+print_track
+title:Jingle Bells
+artist:Jethro Tull
+
+print_playlist
+title:Playlist 3
+order:title
+
+print_playlist
+title:Playlist 1
+order:random_order
+
+nonexistent_command
+
+
+
+

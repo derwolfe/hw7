@@ -1,0 +1,3 @@
+- use a linked list to make a playlist (in order)
+- take a random index to play randomly. This would require an indexing
+    system for the LL.

@@ -1,0 +1,180 @@
+########################
+# Aqualung Album Tracks
+########################
+
+add_track
+title:Aqualung
+artist:Jethro Tull
+album:Aqualung
+comment:One of the more famous
+
+add_track
+title:Locomotive Breath
+artist:Jethro Tull
+album:Aqualung
+comment:
+
+add_track
+title:Teacher
+artist:Jethro Tull
+album:Aqualung
+comment:
+
+########################
+# Stand Up Album Tracks
+########################
+
+add_track
+title:A New Day Yesterday
+artist:Jethro Tull
+album:Stand Up
+comment:
+
+add_track
+title:Bouree
+artist:Jethro Tull
+album:Stand Up
+comment:
+
+add_track
+title:Back to the Family
+artist:Jethro Tull
+album:Stand Up
+comment:
+
+add_track
+title:Nothing is Easy
+artist:Jethro Tull
+album:Stand Up
+comment:
+
+add_track
+title:We Used to Know
+artist:Jethro Tull
+album:Stand Up
+comment:
+
+#########################
+## Minstrel Album Tracks
+#########################
+
+add_track
+title:Minstrel in the Gallery
+artist:Jethro Tull
+album:Minstrel in the Gallery
+comment:
+
+add_track
+title:Cold Wind to Valhalla
+artist:Jethro Tull
+album:Minstrel in the Gallery
+comment:
+
+add_track
+title:Black Satin Dancer
+artist:Jethro Tull
+album:Minstrel in the Gallery
+comment:
+
+add_track
+title:Requiem
+artist:Jethro Tull
+album:Minstrel in the Gallery
+comment:
+
+add_track
+title:One White Duck
+artist:Jethro Tull
+album:Minstrel in the Gallery
+comment:
+
+add_track
+title:Baker St. Muse
+artist:Jethro Tull
+album:Minstrel in the Gallery
+comment:
+
+add_track
+title:Grace
+artist:Jethro Tull
+album:Minstrel in the Gallery
+comment:
+
+###################################
+## South Side album Tracks
+###################################
+
+add_track
+title:Look Out Any Window
+artist:Bruce Hornsby
+album:Scenes from the South Side
+comment:
+
+add_track
+title:The Valley Road
+artist:Bruce Hornsby
+album:Scenes from the South Side
+comment:
+
+add_track
+title:I Will Walk With You
+artist:Bruce Hornsby
+album:Scenes from the South Side
+comment:
+
+add_track
+title:The Road Not Taken
+artist:Bruce Hornsby
+album:Scenes from the South Side
+comment:
+
+add_track
+title:The Show Goes On
+artist:Bruce Hornsby
+album:Scenes from the South Side
+comment:
+
+add_track
+title:The Old Playground
+artist:Bruce Hornsby
+album:Scenes from the South Side
+comment:
+
+add_track
+title:Jacob's Ladder
+artist:Bruce Hornsby
+album:Scenes from the South Side
+comment:
+
+##################################
+## Define a couple of Playlists
+#################################
+
+add_playlist
+pl_title:Playlist 2
+title:The Road Not Taken
+artist:Bruce Hornsby
+title:Jacob's Ladder
+artist:Bruce Hornsby
+title:The Valley Road
+artist:Bruce Hornsby
+title:Grace
+artist:Jethro Tull
+title:Black Satin Dancer
+artist:Jethro Tull
+
+add_playlist
+pl_title:Playlist 1
+title:Aqualung
+artist:Jethro Tull
+title:Teacher
+artist:Jethro Tull
+title:A New Day Yesterday
+artist:Jethro Tull
+title:Back to the Family
+artist:Jethro Tull
+title:We Used to Know
+artist:Jethro Tull
+title:Cold Wind to Valhalla
+artist:Jethro Tull
+
