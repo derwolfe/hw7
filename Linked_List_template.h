@@ -105,16 +105,45 @@ bool Linked_List::is_empty() const
 
 /* 
  * since this is a list we are going to append to the end
- * that is the convention for the lab
+ * that is the convention for the lab. You do have a tail pointer, use it.
  */
 template<class T>
 bool Linked_List:append(const T* item) 
 {
+  /* allocate mem for a new node, since this will be the tail node
+   * set its next pointer to NULL, set its item pointer to item.
+   * increment size.
+   */
+  Node* last_node = new Node<T>;
+  /* check to make sure memory has been allocated
+   */
+  if (last_node == NULL) {
+    return false;
+  }
+  last_node->next = NULL; 
+  last_node->item = item;
+  size++;
+  /* 
+   * If the list is empty, just add the node.
+   */
   if (is_empty()) {
-    Node* first = new Node<T>;
-    first->item = item;
-
-
+    last_node->item = item;
+    last_node->next = NULL;
+    head            = last_node;
+    tail            = last_node;
+    return true;
+  /* 
+   * Non-empty list, add nodes to end by convention (and definition of append)
+   */
+  } else { 
+    Node* temp  = tail;
+    temp->next  = last_node;
+    tail        = last_node;
+    temp        = NULL;   // do i need to set to null. clear pointer?
+    return true;
+  }
+}
+    
     
 #endif
 
