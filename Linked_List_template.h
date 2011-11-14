@@ -173,17 +173,18 @@ bool Linked_List<T>::append(T *item)
  */
 
 template<class T>
-Node* Linked_List<T>::find(int index) const
+typename Linked_List<T>::Node* Linked_List<T>::find(int index) const
 {
   Node* target = head;
   int inc = 1;
   if (index == 1) {
     return head; //already a pointer, ok
   } else {
-    while (inc <= index) {
+    while (inc < index) {
       target = target->next;
-      target++;
-    } 
+      inc++;
+    }
+    // it is iterating over the list one item too far.
     return target;
   }
 }
@@ -253,11 +254,12 @@ T Linked_List<T>::retrieve (int index) const
   // I am having trouble getting find to spit out a node, syntax issue. 
   // this sets a global found variable to the pointer.
   Node* target = find(index);
-  if (target == NULL){
-    return NULL;
-  } else {
-    return target->item;//should return item or pointer to item.
-  }
+  return *target->item;
+//  if (target == NULL){
+//    throw;
+//  } else {
+//    return *target->item;
+//  }
 }
 
 #endif

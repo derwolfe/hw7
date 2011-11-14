@@ -19,5 +19,6 @@ int main ()
   cout << "after pos 4 removed" << endl;
   test->tprint();
   cout << "find item 2" << endl;
+  cout << test->retrieve(2) << endl;
 }
 
