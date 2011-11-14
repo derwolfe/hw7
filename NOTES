@@ -1,3 +1,6 @@
-- use a linked list to make a playlist (in order)
-- take a random index to play randomly. This would require an indexing
-    system for the LL.
+
+- Use a linked list to store pointers to instantiated track objects.
+- Use BSTs to create specialised lists, (by title, artist...etc.)
+- removing track? ref-counter on track? what
+
+
