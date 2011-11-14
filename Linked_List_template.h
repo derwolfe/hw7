@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "List_out_of_index_exception.h"
+
 using namespace std;
 
 ;
@@ -177,7 +179,10 @@ typename Linked_List<T>::Node* Linked_List<T>::find(int index) const
 {
   Node* target = head;
   int inc = 1;
-  if (index == 1) {
+  if (index > size) {
+    throw list_out_of_index_exception
+      ("List_out_of_index_exception: Index must be greater than 0 and less than size")
+  } else if (index == 1) {
     return head; //already a pointer, ok
   } else {
     while (inc < index) {
@@ -251,15 +256,10 @@ bool Linked_List<T>::remove(int index)
 template<class T>
 T Linked_List<T>::retrieve (int index) const
 {
-  // I am having trouble getting find to spit out a node, syntax issue. 
-  // this sets a global found variable to the pointer.
+  /* find will handle the null pointer problem
+   */
   Node* target = find(index);
   return *target->item;
-//  if (target == NULL){
-//    throw;
-//  } else {
-//    return *target->item;
-//  }
 }
 
 #endif
