@@ -15,7 +15,7 @@ class Bst
 
   struct Tree_node {
   public: 
-    /* ?structs are inherently public, 
+    /* structs are inherently public, 
      * why hide it if you want to be public?
      */
     Tree_node*  left;
@@ -208,11 +208,10 @@ bool Bst<T>:delete_node_item(Tree_node* item)
 {
     Tree_node* target = root;
     Tree_node* parent = root;
-
     /* traverse the tree to find the pointer matching the provided node. 
      * This must be done so the parent isn't left with a garbage address in its pointer.
      * 
-     * I can't think of any other way to traverse the list and find the parents
+     * I can't think of any other way but to traverse the tree to find the parents
      */ 
     while (target != NULL) {
       if( (*item->key).compare(*target->key) == 0) { /* item found  */
@@ -227,12 +226,17 @@ bool Bst<T>:delete_node_item(Tree_node* item)
         target = target->left;
       } /* rinse, repeat */
     }
+    // tests
+    cout << "item add:    " << endl;
+    cout << "target add:  " << endl;
+
+    // assert(target == item) /* make sure the two pointers are equal */
     /* condition that will occur only the parent is the root node */
     if (size == 1) { // root node case
       delete target; // why not delete item?
       root = NULL;
       size = 0;
-      return true;
+      return true; /* breaks the function returns the value! */
     }
     /* Now we can start deallocating memory. Having the parent pointer helps immensely. 
      *
@@ -250,19 +254,34 @@ bool Bst<T>:delete_node_item(Tree_node* item)
       }
       target = NULL;
       parent = NULL;
+      return true;
     /* Case 2 - the node has a child to its left, so delete the node, and move
      * the the parent's LEFT pointer to target->left */
     } else if ((target->left != NULL) && (target->right == NULL)) {
       parent->left = target->left; /*move up the node to the left! */
       delete target;
-      target = NULL;
+    /* Case 3 - node has child on its left */
     } else if ((target->left == NULL) && (target->right != NULL)) {
       parent->right = target->right /* move up the node to the right! */
       delete target;
-      target = NULL;
+    /* Case 4 - parent has a child, target. Target has two children. You must figure out
+     * which child to promote. Problem: is this the RIGHT child or the LEFT child
+     * of the parent?
+     */
     } else if ((target->left != NULL) && (target->right != NULL)) {
-
-    
-  --size;
+      if (parent->left == target) {
+        parent->left = process_left_most(target);
+        delete target;
+      } else if (parent->right == target) {
+        parent->right = process_left_most(target);
+        delete target;
+      }
+      target = NULL;
+      parent = NULL;
+      item   = NULL;
+      return true;
+    }
+  }
 }
+
 #endif
