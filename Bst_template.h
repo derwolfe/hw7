@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
-
+#include <cassert>
 /* 
  * What should the key be? How do you want to initialize the tree?
  */
@@ -39,10 +39,10 @@ class Bst
   bool        delete_node_item(T& item);
   Tree_node*  process_left_most(Tree_node* root);
   
-  /* ostream as output? Normally it is by reference */
-  std::ostream  inorder(Tree_node* root);
-  std::ostream  preorder(Tree_node* root);
-  std::ostream  postorder(Tree_node* root);
+  /* These just traverse the tree!*/
+  T inorder(Tree_node* root);
+  T preorder(Tree_node* root);
+  T postorder(Tree_node* root);
 
   void  remove(string key);
   void  print_inorder(std::ostream &os);
@@ -230,7 +230,7 @@ bool Bst<T>:delete_node_item(Tree_node* item)
     cout << "item add:    " << endl;
     cout << "target add:  " << endl;
 
-    // assert(target == item) /* make sure the two pointers are equal */
+    //assert(target == item) /* make sure the two pointers are equal */
     /* condition that will occur only the parent is the root node */
     if (size == 1) { // root node case
       delete target; // why not delete item?
@@ -270,10 +270,10 @@ bool Bst<T>:delete_node_item(Tree_node* item)
      */
     } else if ((target->left != NULL) && (target->right != NULL)) {
       if (parent->left == target) {
-        parent->left = process_left_most(target);
+        parent->left = process_left_most(target->right, target->data);
         delete target;
       } else if (parent->right == target) {
-        parent->right = process_left_most(target);
+        parent->right = process_left_most(target->right, target->data);
         delete target;
       }
       target = NULL;
@@ -283,5 +283,36 @@ bool Bst<T>:delete_node_item(Tree_node* item)
     }
   }
 }
+
+/* process_left_most 
+ * Traverses the right subtree of the node to find its left most element. 
+ * remove passes the right subtree of the node to be deleted. This way, all
+ * left most has to do is face Derek Zoolander's greatest fear: going left. 
+ */
+template<class T>
+typename Bst<T>::Tree_node* Bst::process_left_most(Tree_node& node, T& data)
+{
+  if (node->left == NULL)
+    data = node->data;
+  } else { 
+    return process_left_most(node->left, data);
+  }
+}
+
+template<class T>
+void Bst<T>::print_inorder(std::ostream& os)
+{  
+  os << inorder(root);
+}
+
+// what type should this return??
+template<class T>
+void Bst<T>::inorder(Tree_node* node)
+{ 
+  if (node == NULL) {
+    //os << *node->data;
+    inorder(node->left);
+    inorder(node->right);
+  }
 
 #endif
