@@ -20,5 +20,11 @@ int main ()
   test->tprint();
   cout << "find item 2" << endl;
   cout << test->retrieve(2) << endl;
+  cout << test->get_size() << endl;
+  //test->find(4);
+  cout << endl;
+  cout << "find element 3" << endl;
+  cout << test->retrieve(3) << endl;
+  
 }
 
