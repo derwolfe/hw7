@@ -118,7 +118,7 @@ void Bst<T>::insert(string key, Tree_node* leaf, T* item)
 {
   /* If less than 1, then shift to the left
    */
-  if (key.compare(leaf->key) < 1) {
+  if (key.compare(leaf->key) < 0) {
     if (leaf->left != NULL) {
       insert(key, leaf->left, item);
     } else { 
@@ -135,7 +135,7 @@ void Bst<T>::insert(string key, Tree_node* leaf, T* item)
     /* key comparison of >= 1 means that the key provided is LARGER than the
      * key against which it was tested
      */
-  } else if (key.compare(leaf->key) >= 1) {
+  } else if (key.compare(leaf->key) >= 0) {
     if (leaf->right != NULL) {
       insert(key, leaf->right, item);
     } else { 
@@ -163,19 +163,101 @@ void Bst<T>::insert(string key, Tree_node* leaf, T* item)
 template<class T>
 typename Bst<T>::Tree_node Bst::search_node(string key, Tree_node* leaf)
 {
-  if (key.compare(leaf->key) == 1) {
+  if (key.compare(leaf->key) == 0) {
     return leaf;
-  } else if (key.compare(leaf->key) < 1) {
+  } else if (key.compare(leaf->key) < 0) {
     if (leaf->left != NULL) {
-      search_node(key, leaf->left);
+      return search_node(key, leaf->left);
     }
-  } else if (key.compare(leaf->key) > 1) {
+  } else if (key.compare(leaf->key) > 0) {
     if (leaf->right != NULL) {
-      search_node(key, leaf->right);
+      return search_node(key, leaf->right);
     }
   } else { // key not found
     return NULL; // could be a problem, may need to throw exception!
   }
 }
 
+/* 
+ * Search - this will be the operation called by the user. Search_node will be
+ * called by search.
+ */
+template<class T>
+T* Bst<T>::search(string key)
+{
+  Tree_node* found = search_node(key, root);
+  return found;
+}
+
+/* delete_node_item - will be called by remove.
+ *
+ * called with a pointer to the NODE!
+ *
+ * 4 cases
+ * -------
+ * 1) Node has no children
+ * 2) Node has only a right subtree, move up the right subtree.
+ * 3) Node has only a left subtree, move up the left subtree.
+ * 4) Node has BOTH left and right subtrees. Replace the data element 
+ *    of the current tree with the data element from the left most 
+ *    element of the RIGHT subtree.
+ *
+ */
+template<class T>
+bool Bst<T>:delete_node_item(Tree_node* item)
+{
+    
+    Tree_node* target = root;
+    Tree_node* parent = root;
+
+    /* traverse the tree to find the pointer matching the provided node. 
+     * This must be done so the parent isn't left with a garbage address in its pointer.
+     * 
+     * I can't think of any other way to traverse the list and find the parents
+     */ 
+    while (target != NULL) {
+      if( (*item->key).compare(*target->key) == 0) { /* item found  */
+        break;
+        /* pick the left tree */
+      } else if ((*item->key).compare(*target->key) < 0) { 
+        parent = target;
+        target = target->right;
+        /* pick the right subtree */
+      } else {
+        parent = target;
+        target = target->left;
+      } /* rinse, repeat */
+    }
+    
+    /* Now we can start deallocating memory. Having the parent pointer helps immensely. 
+     *
+     * Case 1 - test to see if node has no children.*/
+    if ((target->left == NULL) && (target->right == NULL)) {
+      if (target == parent) {
+        delete target;
+        target = NULL;
+        parent = NULL;
+      /* check to see if the target is a child */
+      } else if (parent->left == target) {
+        parent->left = NULL;
+        delete target;
+        target = NULL;
+        parent = NULL;
+      } else if (parent->right == target) {
+        parent->right = NULL;
+        delete target;
+        target = NULL;
+        parent = NULL;
+      }
+    /* Case 2 - the node has a child to its left, so delete the node, and allow
+     * left_process_node to do the work */
+    } else if ((target->left != NULL) && (target->right == NULL)) {
+      if ( 
+    
+    
+    
+    target->data = NULL;
+    
+
+}
 #endif
