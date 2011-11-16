@@ -206,7 +206,6 @@ T* Bst<T>::search(string key)
 template<class T>
 bool Bst<T>:delete_node_item(Tree_node* item)
 {
-    
     Tree_node* target = root;
     Tree_node* parent = root;
 
@@ -228,36 +227,42 @@ bool Bst<T>:delete_node_item(Tree_node* item)
         target = target->left;
       } /* rinse, repeat */
     }
-    
+    /* condition that will occur only the parent is the root node */
+    if (size == 1) { // root node case
+      delete target; // why not delete item?
+      root = NULL;
+      size = 0;
+      return true;
+    }
     /* Now we can start deallocating memory. Having the parent pointer helps immensely. 
      *
-     * Case 1 - test to see if node has no children.*/
+     * Case 1 - test to see if node is a leaf.*/
     if ((target->left == NULL) && (target->right == NULL)) {
-      if (target == parent) {
+      if (target == parent) { //root node case
         delete target;
-        target = NULL;
-        parent = NULL;
       /* check to see if the target is a child */
       } else if (parent->left == target) {
         parent->left = NULL;
         delete target;
-        target = NULL;
-        parent = NULL;
       } else if (parent->right == target) {
         parent->right = NULL;
         delete target;
-        target = NULL;
-        parent = NULL;
       }
-    /* Case 2 - the node has a child to its left, so delete the node, and allow
-     * left_process_node to do the work */
+      target = NULL;
+      parent = NULL;
+    /* Case 2 - the node has a child to its left, so delete the node, and move
+     * the the parent's LEFT pointer to target->left */
     } else if ((target->left != NULL) && (target->right == NULL)) {
-      if ( 
-    
-    
-    
-    target->data = NULL;
-    
+      parent->left = target->left; /*move up the node to the left! */
+      delete target;
+      target = NULL;
+    } else if ((target->left == NULL) && (target->right != NULL)) {
+      parent->right = target->right /* move up the node to the right! */
+      delete target;
+      target = NULL;
+    } else if ((target->left != NULL) && (target->right != NULL)) {
 
+    
+  --size;
 }
 #endif
