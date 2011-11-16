@@ -7,8 +7,6 @@
 
 using namespace std;
 
-;
-
 template <class T>
 class Linked_List
 {
@@ -65,7 +63,8 @@ class Linked_List
  * remove()
  * retrieve()
  */
-/* default constructor
+/* 
+ * WORKING - constructor
  */
 template <class T>
 Linked_List<T>::Linked_List ()
@@ -75,7 +74,8 @@ Linked_List<T>::Linked_List ()
   tail = NULL;
 }
 
-/* destructor calls remove at index
+/* WORKING -
+ * destructor calls remove at index
  */
 template<class T>
 Linked_List<T>::~Linked_List()
@@ -85,19 +85,17 @@ Linked_List<T>::~Linked_List()
   }
 }
 
-/* printing the items -- what method do I call? Do you require all
- * users of the template to adhere to get_name??
- */
+/* WORKING print */
 template<class T>
 void Linked_List<T>::print(std::ostream& os)
 {
   Node* cur = head;
   while (cur != NULL) {
-    os << cur->item << endl;
+    os << *cur->item << endl;
     cur = cur->next;
   }
 }
-
+/* WORKING test print method */
 template<class T>
 void Linked_List<T>::tprint()
 {
@@ -107,6 +105,8 @@ void Linked_List<T>::tprint()
     cur = cur->next;
   }
 }
+
+/* Working - size test */
 template<class T>
 bool Linked_List<T>::is_empty() const
 {
@@ -115,16 +115,19 @@ bool Linked_List<T>::is_empty() const
   } // if size > 0 return false
   return false;
 }
-//
+
+/* Working - size getter */
 template<class T>
 int Linked_List<T>::get_size() const
 {
   return size;
 }
 
-/* 
+/* WORKING!
  * since this is a list we are going to append to the end
- * that is the convention for the lab. You do have a tail pointer, use it.
+ * that is the convention for the lab. You do have a tail pointer, use it
+ *
+ * The list will contain pointers to the item, not the item it self. .
  */
 template<class T>
 bool Linked_List<T>::append(T *item) 
@@ -148,7 +151,7 @@ bool Linked_List<T>::append(T *item)
     last_node->next = NULL;
     head            = last_node;
     tail            = last_node;
-    size++;
+    ++size;
     return true;
   /* 
    * Non-empty list, add nodes to end by convention (and definition of append)
@@ -158,53 +161,40 @@ bool Linked_List<T>::append(T *item)
     temp->next  = last_node;
     tail        = last_node;
     temp        = NULL;   // do i need to set to null. clear pointer?
-    size++; 
+    ++size; 
     return true;
   }
 }
 
-/* FIXME how are you going to implement this? Your program is going to
- * use nodes, nodes that always have some sort of pointer to more
- * data.
- *
- * Wouldn't it be more useful to make an iterator, and implement the find
- * function in the class using the list? Since there will be comparisons
- * of varying types/methods. 
- *
- * For any items other than string/int this simply won't work.
- */
-
+/* WORKING - find item at any given index.
+ * there is a problem returning a NULL pointer. The template doesn't like it. 
+ * I could try throwing an exception.
+ * */
 template<class T>
 typename Linked_List<T>::Node* Linked_List<T>::find(int index) const
 {
   Node* target = head;
   int inc = 1;
   if (index > size) {
-    throw list_out_of_index_exception
-      ("List_out_of_index_exception: Index must be greater than 0 and less than size")
+    throw List_out_of_index_exception
+      ("List_out_of_index_exception: Index must be greater than 0 and less than size");
   } else if (index == 1) {
     return head; //already a pointer, ok
   } else {
     while (inc < index) {
       target = target->next;
-      inc++;
+      ++inc;
     }
     // it is iterating over the list one item too far.
     return target;
   }
 }
 
-/* remove - think of scratching an item off of a list, any item
- * can be removed, so you'll move some pointers around. Are we 
- * removing by index or by track?
- *
- * What about size. You need to conform to the convention of the list
- * beginning @ size 1.
+/* WORKING remove 
  */
 template<class T>
 bool Linked_List<T>::remove(int index)
 {
-//  index = index - 1; // conform to convention of pos beginning at one.
   Node* target = head;
   Node* prev = head;
   int inc = 0;
@@ -216,16 +206,18 @@ bool Linked_List<T>::remove(int index)
     head = head->next;
     delete target;
     target = NULL;
+    --size;
     return true;
   
   } else if (index == size) {
     while (inc <= size) { //again, finds previous node to tail
       prev = target->next;
-      inc++;
+     ++inc;
     }
     delete tail;
     tail = prev->next;
     tail->next = NULL;
+    --size; 
     return true;
     
     /* WORKING, skipping over by one\
@@ -239,7 +231,7 @@ bool Linked_List<T>::remove(int index)
       while (inc < (index - 1)) { 
         // less will give the node preceding the target for deletion
         prev = target->next;
-        inc++;
+        ++inc;
       }
     }
     target = prev->next;
@@ -247,8 +239,9 @@ bool Linked_List<T>::remove(int index)
     delete target;
     target = NULL;
     prev = NULL;
+    --size;
     return true;
-  } else { // for indexes that are out of bounds
+  } else { // handles indexes that are out of bounds
     return false;
   }
 } 
@@ -256,7 +249,8 @@ bool Linked_List<T>::remove(int index)
 template<class T>
 T Linked_List<T>::retrieve (int index) const
 {
-  /* find will handle the null pointer problem
+  /* 
+   * find() will deal with an index that cannot be found.
    */
   Node* target = find(index);
   return *target->item;
