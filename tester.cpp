@@ -1,6 +1,8 @@
 #include <stdio.h>
 
 #include "Linked_List_template.h"
+#include "Bst_template.h"
+
 
 int main ()
 {
@@ -25,6 +27,16 @@ int main ()
   cout << endl;
   cout << "find element 3" << endl;
   cout << test->retrieve(3) << endl;
-  
+
+  Bst<int>* tree = new Bst<int>;
+  tree->insert("snaggletooth", a);
+  tree->insert("barf", b);  
+  tree->insert("schietbueddel", d);
+
+//  cout << *d << endl;
+
+  std::ostream os; 
+  tree->print_inorder(os);
+  cout << os;
 }
 
