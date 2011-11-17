@@ -10,10 +10,17 @@ Collection::~Collection()
 
 bool Collection::add_track(Track *in_track)
 {
-  /*
-   * IMPLEMENT ME
-   */
-  
+  if (in_track == NULL) {
+    return false;
+  } else { //just insert in the tree.
+    /* add track to both the search tree and the linked list.
+     *
+     * _bst is the search tree for the tracks, keyed by title.
+     * _p is the LL of the tracks.
+     */
+    tracks_bst.insert(in_track->get_title(), in_track); 
+ //   tracks_ll.append(in_track);
+  }
   return true;
 }
 
@@ -21,8 +28,15 @@ bool Collection::add_playlist(Playlist *in_playlist)
 {
   /*
    * IMPLEMENT ME
+   *
+   * if for what ever reason a NULL ptr is passed, don't add it.
+   * Otherwise, append the playlist to the list of playlists.
    */
-
+  if (in_playlist == NULL) {
+    return false;
+  } else { 
+    playlists_bst.insert(in_playlist->get_title(), in_playlist);
+  }
   return true;
 }
 
@@ -31,34 +45,65 @@ bool Collection::add_playlist(Playlist *in_playlist)
  */
 Track *Collection::find_track(string &track_title)
 {
-  Track * track_p;
+  Track *track_p;
   /*
    * IMPLEMENT ME
    */
-
+  /* search through the BST for the track. 
+   * If after the search has execucted and the track isn't found
+   * NULL will be returned*/
+  track_p = tracks_bst.search(track_title);
   return track_p;
 }
 
 /*
  * Remove a track that matches on title
+ *
+ * Remove from both data-structures!
  */
 void Collection::remove_track(string &track_title)
 {
   /*
    * IMPLEMENT ME
    */
-
+  /* easy remove from BST. the bst structure handles find&remove. The list will take longer.
+   *
+   * What about removal from playlists?*/
+  tracks_bst.remove(track_title);
+ 
+  /* now the linked list, I definitely should have created a list iterator. */
+//  int len = tracks_ll.get_size();
+//  int inc = 1;
+//  while (inc <= len) {
+//    if (track_title.compare(tracks_ll.retrieve(inc).get_title()) == 0) {
+//      tracks_ll.remove(inc);
+//      return;
+//    } else {
+//      ++inc;
+//    }
+//  }
   return;
 }
 
 Playlist *Collection::find_playlist(string &pl_title)
 {
-  Playlist * playlist_p;
+  Playlist *playlist_p;
   /*
    * IMPLEMENT ME
    */
-
+  playlist_p = playlists_bst.search(pl_title);
   return playlist_p;
+//  int len = playlists.get_size();
+//  int inc = 1;
+//  while (inc <= len) {
+//    if (pl_title.compare(playlists.retrieve(inc).get_title()) == 0) {
+//      return playlist_p;
+//    } else {
+//      ++inc;
+//    } 
+//    // return null if looped and no list found.
+//    return NULL;
+//  }
 }
 
 /*PRINT*/
@@ -114,7 +159,7 @@ ostream& operator<<(ostream &os, Collection &in_collection)
    * IMPLEMENT ME
    * tracks by title
    */
-
+  in_collection.tracks_bst.print_inorder(os);
   os << endl;
 
   /*
@@ -132,7 +177,7 @@ ostream& operator<<(ostream &os, Collection &in_collection)
    * IMPLEMENT ME
    * playlists by title
    */
-
+  
   os << endl;
   
   return os;
