@@ -1,8 +1,12 @@
 #include "Playlist.h"
+#include "time.h"
 
 
-Playlist::Playlist(const string &in_title)
+Playlist::Playlist(const std::string &in_title)
 {
+  /* imp me
+   */
+  
   title = in_title;
 }
 
@@ -12,21 +16,29 @@ Playlist::Playlist(const string &in_title)
  */
 bool Playlist::add_track(Track *in_track)
 {
-  /*
-   * IMPLEMENT ME
-   */
-  return true;
-
+  if (in_track == NULL) {
+    return false;
+  } else {
+    playlist->append(in_track);
+    return true;
+  }
 }
 
 bool Playlist::matches(string &in_title)
 {
   /*
-   * IMPLEMENT ME
+   * use the size of the list to loop through the tracks. Retrieve 
+   * track information to check the title against the track.
    */
-
-  return true;
-}
+  int count = tracks->get_size();
+  while (count >= 0) 
+    if (in_title.compare(playlist->retrieve(count)->get_title()) == 0) {
+      return true;
+    } else {
+      --count;
+    }
+    return false;
+}   
 
 string Playlist::get_title()
 {
@@ -45,39 +57,58 @@ void Playlist::print_by_artist(ostream &os)
   os << "  *************************" << endl;
   os << "  * Playlist (by artist): " << title << endl;
   os << "  *************************" << endl;
+  int count = playlist->get_size();
+  int inc = 0;
+  Bst<Tracks>* play_by_artist = new Bst<track>;
 
-  /*
-   * IMPLEMENT ME
-   */
-
+  while (inc <= count) {
+    play_by_artist->insert( playlist->retrieve(inc)->get_artist(), 
+        playlist.retrieve(inc));
+  }
+  os << play_by_artist->print_inorder;
+  os << endl;
+  delete play_by_artist;
+  play_by_artist = NULL;
 }
 
-/*PRINT*/
+/*PRINT - perfect for a BST, make the tree, loop through it inorder to take
+ * advantage of the sorting, et voila, a tree is made. 
+ *
+ * Then just traverse the tree inorder.*/
 void Playlist::print_by_title(ostream &os)
 {
   os << "  *************************" << endl;
   os << "  * Playlist (by title): " << title << endl;
   os << "  *************************" << endl;
+  int count = playlist->get_size();
+  int inc = 1;
+  Bst<Tracks>* play_by_title = new Bst<track>;
 
-  /*
-   * IMPLEMENT ME
-   */
+  while (inc <= count) {
+    play_by_title->insert( playlist->retrieve(inc)->get_title(), 
+        playlist->retrieve(inc));
+    ++inc;
+  }
+  os << play_by_title->print_inorder;
+  os << endl;
+  delete play_by_title;
+  play_by_title = NULL;
 }
 
-/*PRINT*/
+/*PRINT - a bit simpler, print the nodes from the linked list*/
 void Playlist::print_by_added_order(ostream &os)
 {
   os << "  ******************************" << endl;
   os << "  * Playlist (by added order): " << title << endl;
   os << "  ******************************" << endl;
-
-  /*
-   * IMPLEMENT ME
-   */
-
+  os << 
+  playlist->print(os);
+  os << endl;
 }
 
-/*PRINT*/
+/*PRINT - not sure if i should be deleting the pointer from the list
+ * once the item has been played.
+ */
 void Playlist::play_by_added_order(ostream &os)
 {
   /*
@@ -86,37 +117,53 @@ void Playlist::play_by_added_order(ostream &os)
   os << "  ******************************" << endl;
   os << "  * Play (by added order): " << title << endl;
   os << "  ******************************" << endl;
-
-  os << "  Play : " << /* IMPLEMENT ME */ << endl;
-
-
-
+  int inc = 1;
+  int size = playlist->get_size();
+ 
+  while (inc <= size) { //since inc starts at 0;
+    os << playlist->retrieve(inc) << endl;
+  }  
+  os << "  Play : " << playlist->retrieve(inc) << endl;
 }
 
-/*PRINT*/
+/*PRINT - play a playlist, randomized, n times.*/
 void Playlist::play_by_randomized(ostream &os, int repetitions)
 {
-  /*
-   * IMPLEMENT ME
-   */
+// you need to create a random number generator modulo get_size 
+// in order to repeat less than size times.
   os << "  ******************************" << endl;
   os << "  * Play (randomized): " << title << endl;
   os << "  * Repetitions: " << repetitions << endl;
   os << "  ******************************" << endl;
-
-  os << "  Play : " << /* IMPLEMENT ME */ << endl;
-
-
+  
+  int limit = repetitions;
+  srand(time(NULL));
+  // choose track at random, limit list to number of reps
+  while (limit > 0) {
+    rando = (rand() % repetitions) + 1;
+    os << playlist->retrieve(rando) << endl;
+    --limit;
+  } // not sure I understand Play: ...
+  os << "  Play : " << playlist->retrieve(1)<< endl;
 }
 
 /*PRINT*/
 std::ostream& operator<<(std::ostream &os, Playlist &in_playlist)
 {
   /*
-   * IMPLEMENT ME
    * print playlist in title order by default
    */
-
+  int count = playlist->get_size();
+  int inc   = 0;
+  Bst<Track>* by_title = new Bst<Track>;
+  while (inc < count) { 
+    by_title->insert(playlist->retrieve(inc)->get_title(), 
+        playlist->retrieve(inc));
+  }//inorder chosen because it will take the sorting into account.
+  by_title->print_inorder(os);
+  delete by_title;
+  by_title = NULL;
   return os;
 }
+
 

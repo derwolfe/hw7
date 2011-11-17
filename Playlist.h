@@ -25,10 +25,8 @@ class Playlist
   friend std::ostream& operator<<(std::ostream &os, Playlist &in_playlist);
 
  private:
-  std::string           title;
-  /*
-   * IMPLEMENT ME
-   */
+  std::string         title;
+  Linked_List<Track>  playlist;
 };
 
 #endif
