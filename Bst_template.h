@@ -328,13 +328,20 @@ bool Bst<T>::delete_node_item(Tree_node* target)
 /* process_left_most 
  * Traverses the right subtree of the node to find its left most element. 
  * remove passes the right subtree of the node to be deleted. This way, all
- * left most has to do is face Derek Zoolander's greatest fear: going left. 
+ * left most has to do is face Derek Zoolander's greatest fear: going left.
+ *
+ * This is where the node should be deleted! 
  */
 template<class T>
 void Bst<T>::process_left_most(Tree_node* &node, T* &data)
 {
   if (node->left == NULL) {
     data = node->item;
+ /* 
+  * the node from whom the data is being taken should be deleted here. This is the only place
+  * where the node will be referenced. NOT in the remove function.
+  */ 
+    delete node;
   } else { 
     return process_left_most(node->left, data);
   }

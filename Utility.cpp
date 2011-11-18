@@ -284,7 +284,6 @@ void process_db_cmd_file(ifstream &in_port, Collection in_collection,
       /*
        * IMPLEMENT ME
        */
-      playlist_p->play_by_added_order(out_port);
       if (playlist_p == NULL) {
         cout << "Error: finding playlist" << endl;
         cout << "Playlist: " << title_value << endl;
@@ -299,13 +298,26 @@ void process_db_cmd_file(ifstream &in_port, Collection in_collection,
        * IMPLEMENT ME
        * convert the repetitions_str to repetitions_int, plug in.
        * find the playlist as well
-       *
        */
 
-   //   in_port.getline(input_line, MAX_INPUT_LENGTH);
-   //   parse_cmd_line("repetitions", input_line, repetitions_str);
-   //   repetitions_int = atoi(repetitions_str);
-   //   playlist_p->play_by_randomized(out_port, repetitions_int);
+      /* get the title of the playlist */
+      in_port.getline("input_line", MAX_INPUT_LENGTH);
+      parse_cmd_line("title", input_line, title);
+
+      /* check to make sure playlist is real */
+      if (playlist_p == NULL) {
+        cout << "Error: finding playlist" << endl;
+        cout << "Playlist: " << title_value << endl;
+        continue;
+      }
+
+      /* get the rep number */
+      in_port.getline(input_line, MAX_INPUT_LENGTH);
+      parse_cmd_line("repetitions", input_line, repetitions_str);
+ 
+      /* convert the rep string to rep number */
+      repetitions_int = atoi(repetitions_str);
+      playlist_p->play_by_randomized(out_port, repetitions_int);
 
       break;
 
