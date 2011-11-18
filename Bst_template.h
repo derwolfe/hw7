@@ -223,9 +223,10 @@ T* Bst<T>::search(std::string key)
 template<class T>
 bool Bst<T>::delete_node_item(Tree_node* target)
 {
-//  if (root == NULL) {
-//    return false;
-//  } else {
+  /* check if list is empty, if so, return false. */
+  if (root == NULL) {
+    return false;
+  } else {
 //    if ( root == target ) {// if the pointers are equal
 //      // check to see if root has children
 //      if (root->right == NULL && root->left == NULL) {
@@ -243,8 +244,8 @@ bool Bst<T>::delete_node_item(Tree_node* target)
 //      target = NULL;
 //      return true;
 //    }
-//    Tree_node* cur = root;
-//    Tree_node* parent = root;
+    Tree_node* cur = root;
+    Tree_node* parent = root;
 //    /* traverse the tree to find the pointer matching the provided node. 
 //     * This must be done so the parent isn't left with a garbage address in its pointer.
 //     * 
@@ -252,21 +253,21 @@ bool Bst<T>::delete_node_item(Tree_node* target)
 //     *
 //     * What if you are deleting the Root!?!
 //     */ 
-//    while (cur != NULL) {
-//      if( (target->key).compare(cur->key) == 0) { /* item found  */
-//        break;
-//        /* pick the left tree */
-//      } else if ((target->key).compare(cur->key) < 0) { 
-//        parent = cur;
-//        cur = cur->left;
-//      //  cout << cur << endl;
-//        /* pick the right subtree */
-//      } else {// ((target->key).compare(cur->key) > 0) {
-//        parent = cur;
-//        cur = cur->right;
-//        //cout << cur << endl;
-//      } /* rinse, repeat */
-//    }
+    while (cur != NULL) {
+      if( (target->key).compare(cur->key) == 0) { /* item found  */
+        break;
+        /* pick the left tree */
+      } else if ((target->key).compare(cur->key) < 0) { 
+        parent = cur;
+        cur = cur->left;
+      //  cout << cur << endl;
+        /* pick the right subtree */
+      } else {// ((target->key).compare(cur->key) > 0) {
+        parent = cur;
+        cur = cur->right;
+        //cout << cur << endl;
+      } /* rinse, repeat */
+    }
 //    // tests - PASS
 //    //cout << "current address: " << cur << endl;
 //    //cout << "target  address: " << target << endl;
@@ -278,52 +279,52 @@ bool Bst<T>::delete_node_item(Tree_node* target)
 //    --size;
 //    /* Now we can start deallocating memory. Having the parent pointer helps immensely. 
 //     *
-//     * Case 1 - test to see if node is a leaf.*/
-//    if ((cur->left == NULL) && (cur->right == NULL)) {
-//      if (cur == parent) { //root node case
-//        delete cur;
-//      /* check to see if the target is a child */
-//      } else if (parent->left == cur) {
-//        parent->left = NULL;
-//        delete cur;
-//      } else if (parent->right == cur) {
-//        parent->right = NULL;
-//        delete cur;
-//      }
-//      cur = NULL;
-//      parent = NULL;
-//      return true;
-//
-//    /* Case 2 - the node has a child to its left, so delete the node, and move
-//     * the the parent's LEFT pointer to target->left */
-//    } else if ((cur->left != NULL) && (cur->right == NULL)) {
-//      parent->left = cur->left; /*move up the node to the left! */
-//      delete cur;
-//      return true;
-//    /* Case 3 - node has child on its left */
-//    } else if ((cur->left == NULL) && (cur->right != NULL)) {
-//      cur->right = cur->right; /* move up the node to the right! */
-//      delete cur;
-//      return true;
-//    /* Case 4 - parent has a child, target. Target has two children. You must figure out
-//     * which child to promote. Problem: is this the RIGHT child or the LEFT child
-//     * of the parent?
-//     */
-//    } else if ((cur->left != NULL) && (cur->right != NULL)) {
-//      if (cur->left == target) {
+//     * Case 1 - is the node a leaf?.*/
+    if ((cur->left == NULL) && (cur->right == NULL)) {
+      if (cur == parent) { //root node case
+        delete cur;
+      /* check to see if the target is a child */
+      } else if (parent->left == cur) {
+        parent->left = NULL;
+        delete cur;
+      } else if (parent->right == cur) {
+        parent->right = NULL;
+        delete cur;
+      }
+      cur = NULL;
+      parent = NULL;
+      return true;
+
+    /* Case 2 - the node has a child to its left, so delete the node, and move
+     * the the parent's LEFT pointer to target->left. NO RIGHT child. */
+    } else if ((cur->left != NULL) && (cur->right == NULL)) {
+      parent->left = cur->left; /*move up the node to the left! */
+      delete cur;
+      return true;
+    
+    /* Case 3 - node has child on its left, and NO LEFT CHILD */
+    } else if ((cur->left == NULL) && (cur->right != NULL)) {
+      parent->right = cur->right; /* move up the node to the right! */
+      delete cur;
+      return true;
+    
+    /* Case 4 - Target has two children. You must figure out
+     * which child to promote. Problem: is this the RIGHT child or the LEFT child
+     * of the parent?
+     */
+    } else if ((cur->left != NULL) && (cur->right != NULL)) {
+
+//      if (parent->left == target) {
 //        process_left_most(cur->right, cur->item);
 //        
-//      //  delete target;
 //      } else if (parent->right == cur) {
-//        process_left_most(cur->right, cur->item);
-//      //  delete target;
-//      }
-//      cur = NULL;
-//      parent = NULL;
-//      target = NULL;
-//      return true;
-//    }
-//  }
+      process_left_most(cur->right, cur->item);
+      cur = NULL;
+      parent = NULL;
+      target = NULL;
+      return true;
+    }
+  }
 }
 /* process_left_most 
  * Traverses the right subtree of the node to find its left most element. 
