@@ -29,14 +29,13 @@ class Collection
   friend std::ostream& operator<<(std::ostream &os, Collection &in_collection);
 
  private:
-//  Linked_List<Playlist> playlists_ll;
+  Linked_List<Playlist> playlists_ll;
   Bst<Playlist>         playlists_bst;
+  
   Linked_List<Track>    tracks_ll;
   Bst<Track>            tracks_bst;
-
-  // the following will be made more than once;
-  Bst<Track>*  tracks_by_artist;
-  Bst<Track>*  tracks_by_title;
+  Bst<Track>            tracks_by_artist;
+//  Bst<Track>            tracks_by_title;
 
 
 };

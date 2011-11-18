@@ -39,7 +39,7 @@ class Linked_List
   bool      remove(int index);
   bool      append(T* item);
   Node*     find(int index) const; //retrieve at index, or item?
-  T         retrieve(int index) const;
+  T*        retrieve(int index) const;
  // following used in testing 
   void      tprint();
 };
@@ -247,13 +247,13 @@ bool Linked_List<T>::remove(int index)
 } 
   
 template<class T>
-T Linked_List<T>::retrieve (int index) const
+T* Linked_List<T>::retrieve (int index) const
 {
   /* 
    * find() will deal with an index that cannot be found.
    */
   Node* target = find(index);
-  return *target->item;
+  return target->item;
 }
 
 #endif

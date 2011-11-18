@@ -274,19 +274,39 @@ void process_db_cmd_file(ifstream &in_port, Collection in_collection,
       /*
        * IMPLEMENT ME
        */
+      in_collection.remove_track(title_value);
       break;
 
     case CMD_PLAY_ADDED_ORDER:
+      in_port.getline(input_line, MAX_INPUT_LENGTH);
+      parse_cmd_line("title", input_line, title_value);
+      playlist_p = in_collection.find_playlist(title_value);
       /*
        * IMPLEMENT ME
        */
+      playlist_p->play_by_added_order(out_port);
+      if (playlist_p == NULL) {
+        cout << "Error: finding playlist" << endl;
+        cout << "Playlist: " << title_value << endl;
+        continue;
+      }
+      playlist_p->play_by_added_order(out_port);
       break;
 
     /*PRINT*/
     case CMD_PLAY_RANDOMIZED:
       /*
        * IMPLEMENT ME
+       * convert the repetitions_str to repetitions_int, plug in.
+       * find the playlist as well
+       *
        */
+
+   //   in_port.getline(input_line, MAX_INPUT_LENGTH);
+   //   parse_cmd_line("repetitions", input_line, repetitions_str);
+   //   repetitions_int = atoi(repetitions_str);
+   //   playlist_p->play_by_randomized(out_port, repetitions_int);
+
       break;
 
     /*PRINT*/
@@ -332,6 +352,8 @@ void process_db_cmd_file(ifstream &in_port, Collection in_collection,
       /*
        * IMPLEMENT ME
        */
+      playlist_p->print_by_added_order(out_port);
+      out_port << endl;
       cout << "Error: unrecognized playlist print order" << endl << endl;
       break;
 
@@ -343,6 +365,7 @@ void process_db_cmd_file(ifstream &in_port, Collection in_collection,
       /*
        * IMPLEMENT ME
        */
+      playlist_p->print_by_title(out_port);
       out_port << endl;
       break;
 
@@ -354,6 +377,7 @@ void process_db_cmd_file(ifstream &in_port, Collection in_collection,
       /*
        * IMPLEMENT ME
        */
+      playlist_p->print_by_artist(out_port);
       out_port << endl;
       break;
 
@@ -365,6 +389,7 @@ void process_db_cmd_file(ifstream &in_port, Collection in_collection,
       /*
        * IMPLEMENT ME
        */
+      in_collection.print_playlists_by_added_order(out_port);
       out_port << endl;
       break;
 

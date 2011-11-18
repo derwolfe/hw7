@@ -27,6 +27,9 @@ class Playlist
  private:
   std::string         title;
   Linked_List<Track>  playlist;
+  Bst<Track>          play_by_artist;
+  Bst<Track>          play_by_title;
+  Linked_List<Track>  play_by_random;
 };
 
 #endif
