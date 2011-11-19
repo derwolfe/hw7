@@ -1,0 +1,1 @@
+g++ -DF_SOLUTION -c -g Playlist.cpp

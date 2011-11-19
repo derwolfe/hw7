@@ -72,7 +72,7 @@ void Playlist::print_by_title(ostream &os)
   os << "  * Playlist (by title): " << title << endl;
   os << "  *************************" << endl;
   /* use the inorder sorted printed method. */
-  play_by_title.print_preorder(os); 
+  play_by_title.print_inorder(os); 
 }
 
 /*PRINT - a bit simpler, print the nodes from the linked list*/
@@ -97,14 +97,12 @@ void Playlist::play_by_added_order(ostream &os)
   os << "  ******************************" << endl;
   os << "  * Play (by added order): " << title << endl;
   os << "  ******************************" << endl;
-  int inc = 1;
   int size = playlist.get_size();
- 
-  while (inc) { //since inc starts at size
-    os << "  Play : " << playlist.retrieve(1) << endl;
-    playlist.remove(1);
-    --inc;
-  }
+  os << "  Play : " << *playlist.retrieve(1) << endl;
+    /* delete the track from the list. Next time this function is called, the
+     * track will be gone and the next track will be played..
+     */
+  playlist.remove(1);
 }
 
 /*PRINT - play a playlist, randomized, n times.*/
@@ -118,18 +116,21 @@ void Playlist::play_by_randomized(ostream &os, int repetitions)
   os << "  ******************************" << endl;
   
   int limit = repetitions;
+  int range = playlist.get_size() - 1;
   int rando;
   srand(time(NULL));
   /* choose track at random, limit list to number of reps.
    * make a playlist, play the top!
     *   
     */ 
-  while (limit) {
-    rando = (rand() % repetitions) + 1;
+  while (limit > 0) {
+    rando = (rand() % range) + 1;
     play_by_random.append(playlist.retrieve(rando));
     --limit;
   } /* play the top track! */
-  os << "  Play : " << play_by_random.retrieve(1)<< endl;
+  os << "  Play : " << endl << *play_by_random.retrieve(1)<< endl;
+  os << "Rest of the List: " << endl;
+    play_by_random.print(os);
 }
 
 /*PRINT*/

@@ -8,6 +8,9 @@
 /* 
  * What should the key be? How do you want to initialize the tree?
  */
+
+using namespace std;
+
 template <class T>
 class Bst
 {
@@ -35,7 +38,7 @@ class Bst
   void        insert(std::string key, T* item);
   T*          search(std::string key);
   Tree_node*  search_node(std::string key, Tree_node* leaf);
-  bool        delete_node_item(Tree_node* target);
+  bool        delete_node_item(Tree_node* &target);
   void        process_left_most(Tree_node* &node, T* &data);
   
   /* These just traverse the tree!*/
@@ -91,7 +94,7 @@ template<class T>
 Bst<T>::~Bst()
 {
   while (root != NULL) {
-    remove(root->key);
+    delete_node_item(root);
   }
 }
 
@@ -119,25 +122,22 @@ bool Bst<T>::is_empty() const
 template<class T>
 void Bst<T>::insert(std::string key, T* item)
 {
+// somewhere a problem is insert  
+  Tree_node* leaf = new Tree_node;
+  leaf->key       = key; 
+  leaf->item      = item;
+  leaf->right     = NULL;
+  leaf->left      = NULL;
   if (root == NULL) {
-    Tree_node* new_leaf = new Tree_node;
-    new_leaf->key       = key; 
-    new_leaf->item      = item;
-    new_leaf->right     = NULL;
-    new_leaf->left      = NULL;
-    root = new_leaf;
+    root = leaf;
     size = 1;
     return;
-  } else if (root != NULL){ 
+  } else { // if (root != NULL)
     Tree_node* current  = root;
-    Tree_node* leaf     = new Tree_node;
-    leaf->key       = key; 
-    leaf->item      = item;
-    leaf->right     = NULL;
-    leaf->left      = NULL;
     ++size;
     while (current != NULL) {
         // go LEFT
+     // cout << "left = -1, right = >= 0)" << key.compare(current->key) << endl;
       if (key.compare(current->key) < 0) {
         if (current->left == NULL) {
           current->left = leaf;
@@ -202,8 +202,6 @@ T* Bst<T>::search(std::string key)
 
 /* delete_node_item - will be called by remove.
  *
- * called with a pointer to the NODE!
- *
  * 4 cases
  * -------
  * 1) Node has no children
@@ -221,128 +219,62 @@ T* Bst<T>::search(std::string key)
  * am sure it could be.
  */
 template<class T>
-bool Bst<T>::delete_node_item(Tree_node* target)
+bool Bst<T>::delete_node_item(Tree_node* &target)
 {
-  /* check if list is empty, if so, return false. */
-  if (root == NULL) {
-    return false;
-  } else {
-//    if ( root == target ) {// if the pointers are equal
-//      // check to see if root has children
-//      if (root->right == NULL && root->left == NULL) {
-//        root = NULL;
-//        size = 0;
-//        return true;
-//      } else if (root->left != NULL && root->right == NULL) {
-//        root = root->left;
-//        --size;
-//      } else if (root->left != NULL && root->right != NULL) {
-//        process_left_most(root->right, target->item);
-//        --size;
-//      }
-//      delete target;
-//      target = NULL;
-//      return true;
-//    }
-    Tree_node* cur = root;
-    Tree_node* parent = root;
-//    /* traverse the tree to find the pointer matching the provided node. 
-//     * This must be done so the parent isn't left with a garbage address in its pointer.
-//     * 
-//     * I can't think of any other way but to traverse the tree to find the parents
-//     *
-//     * What if you are deleting the Root!?!
-//     */ 
-    while (cur != NULL) {
-      if( (target->key).compare(cur->key) == 0) { /* item found  */
-        break;
-        /* pick the left tree */
-      } else if ((target->key).compare(cur->key) < 0) { 
-        parent = cur;
-        cur = cur->left;
-      //  cout << cur << endl;
-        /* pick the right subtree */
-      } else {// ((target->key).compare(cur->key) > 0) {
-        parent = cur;
-        cur = cur->right;
-        //cout << cur << endl;
-      } /* rinse, repeat */
-    }
-//    // tests - PASS
-//    //cout << "current address: " << cur << endl;
-//    //cout << "target  address: " << target << endl;
-//
-//    //assert(target == item) /* make sure the two pointers are equal */
-//    
-//    /* first lets decrement size, before any returns are called
-//     */
-//    --size;
-//    /* Now we can start deallocating memory. Having the parent pointer helps immensely. 
-//     *
-//     * Case 1 - is the node a leaf?.*/
-    if ((cur->left == NULL) && (cur->right == NULL)) {
-      if (cur == parent) { //root node case
-        delete cur;
-      /* check to see if the target is a child */
-      } else if (parent->left == cur) {
-        parent->left = NULL;
-        delete cur;
-      } else if (parent->right == cur) {
-        parent->right = NULL;
-        delete cur;
-      }
-      cur = NULL;
-      parent = NULL;
-      return true;
+  Tree_node *del_ptr;
+  T* replacement_item;  
+  
+  /* Case 1 - is the node a leaf?.*/
+  if ((target->left == NULL) && (target->right == NULL)) {
+    delete target;
+    target = NULL;
+    return true;
 
-    /* Case 2 - the node has a child to its left, so delete the node, and move
-     * the the parent's LEFT pointer to target->left. NO RIGHT child. */
-    } else if ((cur->left != NULL) && (cur->right == NULL)) {
-      parent->left = cur->left; /*move up the node to the left! */
-      delete cur;
-      return true;
-    
-    /* Case 3 - node has child on its left, and NO LEFT CHILD */
-    } else if ((cur->left == NULL) && (cur->right != NULL)) {
-      parent->right = cur->right; /* move up the node to the right! */
-      delete cur;
-      return true;
-    
-    /* Case 4 - Target has two children. You must figure out
-     * which child to promote. Problem: is this the RIGHT child or the LEFT child
-     * of the parent?
-     */
-    } else if ((cur->left != NULL) && (cur->right != NULL)) {
-
-//      if (parent->left == target) {
-//        process_left_most(cur->right, cur->item);
-//        
-//      } else if (parent->right == cur) {
-      process_left_most(cur->right, cur->item);
-      cur = NULL;
-      parent = NULL;
-      target = NULL;
-      return true;
-    }
+  /* Case 2 - the target has no child to its left, keep checking */ 
+  } else if (target->left == NULL) {
+    /* find out which parent node it is */
+    del_ptr = target;
+    target = target->right;
+    del_ptr->right = NULL;
+    delete del_ptr;
+    return true;
+ 
+    /* Case 3 - node has child on its left, and NO Right CHILD */
+  } else if (target->right == NULL) {
+    del_ptr = target;
+    target = target->left;
+    del_ptr->left = NULL;
+    delete del_ptr;
+    return true; 
+ 
+  /* Case 4 - Target has two children. You must figure out
+  * which child to promote. Problem: is this the RIGHT child or the LEFT child
+  * of the parent?
+  */
+  } else { //if ((cur->left != NULL) && (cur->right != NULL)) {
+    process_left_most(target->right, replacement_item);
+    target->item = replacement_item;
+    return true;
   }
 }
+
+
+  
 /* process_left_most 
  * Traverses the right subtree of the node to find its left most element. 
  * remove passes the right subtree of the node to be deleted. This way, all
  * left most has to do is face Derek Zoolander's greatest fear: going left.
- *
- * This is where the node should be deleted! 
  */
 template<class T>
 void Bst<T>::process_left_most(Tree_node* &node, T* &data)
 {
   if (node->left == NULL) {
     data = node->item;
- /* 
-  * the node from whom the data is being taken should be deleted here. This is the only place
-  * where the node will be referenced. NOT in the remove function.
-  */ 
-    delete node;
+    // new changes
+    Tree_node *del_ptr = node;
+    node = node->right;
+    del_ptr->right = NULL;
+    delete del_ptr;
   } else { 
     return process_left_most(node->left, data);
   }
@@ -426,8 +358,8 @@ void Bst<T>::test_print(Tree_node* head)
   if (head == NULL) {
     return;
   } 
+  std::cout << "Key: " << head->key << "  Item: " << *head->item << std::endl;
   test_print(head->left);
-  std::cout << *head->item << std::endl;
   test_print(head->right);
 }
 

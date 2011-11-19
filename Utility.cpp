@@ -301,24 +301,22 @@ void process_db_cmd_file(ifstream &in_port, Collection in_collection,
        */
 
       /* get the title of the playlist */
-      in_port.getline("input_line", MAX_INPUT_LENGTH);
-      parse_cmd_line("title", input_line, title);
-
+      in_port.getline(input_line, MAX_INPUT_LENGTH);
+      parse_cmd_line("title", input_line, title_value);
+      playlist_p = in_collection.find_playlist(title_value);
+      
       /* check to make sure playlist is real */
       if (playlist_p == NULL) {
         cout << "Error: finding playlist" << endl;
         cout << "Playlist: " << title_value << endl;
         continue;
       }
-
-      /* get the rep number */
       in_port.getline(input_line, MAX_INPUT_LENGTH);
       parse_cmd_line("repetitions", input_line, repetitions_str);
  
       /* convert the rep string to rep number */
-      repetitions_int = atoi(repetitions_str);
+      repetitions_int = atoi(repetitions_str.c_str());
       playlist_p->play_by_randomized(out_port, repetitions_int);
-
       break;
 
     /*PRINT*/
@@ -347,37 +345,43 @@ void process_db_cmd_file(ifstream &in_port, Collection in_collection,
     case CMD_PRINT_PLAYLIST:
       in_port.getline(input_line, MAX_INPUT_LENGTH);
       parse_cmd_line("title", input_line, title_value);
-
+      // get the title
       in_port.getline(input_line, MAX_INPUT_LENGTH);
       parse_cmd_line("order", input_line, order_value);
-
+      // get the order type
       playlist_p = in_collection.find_playlist(title_value);
       if ( playlist_p == (Playlist *)0 ) {
         cout << "Error: failure finding a playlist" << endl;
         cout <<  "Title:  " << title_value  << endl << endl;
+        cout << "Error: unrecognized playlist print order" << endl << endl;
         continue;
       }
-
       out_port << "*********************" << endl;
       out_port << "**  Print Playlist **" << endl;
       out_port << "*********************" << endl;
       /*
        * IMPLEMENT ME
        */
-      playlist_p->print_by_added_order(out_port);
-      out_port << endl;
-      cout << "Error: unrecognized playlist print order" << endl << endl;
+      if (order_value.compare("added order") == 0) {
+        playlist_p->print_by_added_order(out_port);
+        out_port << endl;
+      } else if (order_value.compare("artist") == 0) {
+        playlist_p->print_by_artist(out_port);
+      } else if (order_value.compare("title") == 0) {
+        playlist_p->print_by_title(out_port);
+      }
       break;
 
     /*PRINT*/
     case CMD_PRINT_TRACKS_BY_TITLE:
+
       out_port << "*****************************" << endl;
       out_port << "* Print All Tracks by title *" << endl;
       out_port << "*****************************" << endl;
       /*
        * IMPLEMENT ME
        */
-      playlist_p->print_by_title(out_port);
+      in_collection.print_tracks_by_title(out_port);
       out_port << endl;
       break;
 
@@ -389,7 +393,7 @@ void process_db_cmd_file(ifstream &in_port, Collection in_collection,
       /*
        * IMPLEMENT ME
        */
-      playlist_p->print_by_artist(out_port);
+      in_collection.print_tracks_by_artist(out_port);
       out_port << endl;
       break;
 
